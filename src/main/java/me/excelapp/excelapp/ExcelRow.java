@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ExcelRow {
-    public static String excelPath = "/excel/db.xlsx";
-
     private String firstName;
     private String lastName;
     private String nationalCode;
@@ -66,9 +64,9 @@ public class ExcelRow {
         return birthDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
-    public void addToExcel(ServletContext sc) throws IOException {
-        FileInputStream file = new FileInputStream(sc.getRealPath(excelPath));
-        Workbook workbook = new XSSFWorkbook(file);
+    public void addToExcel() throws IOException {
+        FileInputStream fis = new FileInputStream(Config.excelPath);
+        Workbook workbook = new XSSFWorkbook(fis);
         Sheet sheet = workbook.getSheetAt(0);
 
         Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
@@ -79,28 +77,22 @@ public class ExcelRow {
         newRow.createCell(3).setCellValue(getBirthDate());
 
         try {
-            OutputStream outputStream = new FileOutputStream(sc.getRealPath(excelPath));
+            OutputStream outputStream = new FileOutputStream(Config.excelPath);
             workbook.write(outputStream);
             workbook.close();
-            file.close();
         } catch (IOException e) {
             workbook.close();
-            file.close();
             throw e;
         }
     }
 
-    public static void removeRow(ServletContext sc, int rowNum) throws IOException {
-        FileInputStream file = new FileInputStream(sc.getRealPath(excelPath));
+    public static void removeRow(int rowNum) throws IOException, IllegalStateException {
+        FileInputStream file = new FileInputStream(Config.excelPath);
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
         sheet.removeRow(sheet.getRow(rowNum));
 
-        /*
-        Removing empty row
-        by replacing the last row
-        with the empty row.
-         */
+        // Removing the empty rows by replacing the empty row with the last row.
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             if (sheet.getRow(i).getCell(0) == null) {
                 Row lastRow = sheet.getRow(sheet.getLastRowNum());
