@@ -76,17 +76,14 @@ public class ExcelRow {
         newRow.createCell(2).setCellValue(getNationalCode());
         newRow.createCell(3).setCellValue(getBirthDate());
 
-        try {
-            OutputStream outputStream = new FileOutputStream(Config.excelPath);
-            workbook.write(outputStream);
-            workbook.close();
-        } catch (IOException e) {
-            workbook.close();
-            throw e;
-        }
+        FileOutputStream fos = new FileOutputStream(Config.excelPath);
+        workbook.write(fos);
+        workbook.close();
+        fis.close();
+        fos.close();
     }
 
-    public static void removeRow(int rowNum) throws IOException, IllegalStateException {
+    public static void removeRow(int rowNum) throws IOException {
         FileInputStream file = new FileInputStream(Config.excelPath);
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
@@ -106,5 +103,36 @@ public class ExcelRow {
                 sheet.removeRow(sheet.getRow(sheet.getLastRowNum()));
             }
         }
+        FileOutputStream fileOut = new FileOutputStream(Config.excelPath);
+        workbook.write(fileOut);
+        file.close();
+        workbook.close();
+        fileOut.close();
+    }
+
+    public static Row getRow(int rowNum) throws IOException {
+        FileInputStream file = new FileInputStream(Config.excelPath);
+        Workbook workbook = new XSSFWorkbook(file);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        return sheet.getRow(rowNum);
+    }
+
+    public void editRow(int rowNum) throws IOException {
+        FileInputStream file = new FileInputStream(Config.excelPath);
+        Workbook workbook = new XSSFWorkbook(file);
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row = sheet.getRow(rowNum);
+
+        row.getCell(0).setCellValue(getFirstName());
+        row.getCell(1).setCellValue(getLastName());
+        row.getCell(2).setCellValue(getNationalCode());
+        row.getCell(3).setCellValue(getBirthDate());
+
+        OutputStream outputStream = new FileOutputStream(Config.excelPath);
+        workbook.write(outputStream);
+        file.close();
+        workbook.close();
+        outputStream.close();
     }
 }

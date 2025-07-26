@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -46,5 +45,21 @@ public class IndexServlet extends HttpServlet {
         fis.close();
         workbook.close();
         return excelRows;
+    }
+
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+        if (method != null && method.equals("DELETE")) {
+            doDelete(req, resp);
+            return;
+        }
+    }
+
+    @Override
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String rowNum =  req.getParameter("rowNumber");
+        ExcelRow.removeRow(Integer.parseInt(rowNum));
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
