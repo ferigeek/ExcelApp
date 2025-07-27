@@ -1,6 +1,6 @@
 package me.excelapp.excelapp;
 
-import jakarta.servlet.ServletContext;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -64,10 +64,24 @@ public class ExcelRow {
         return birthDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
-    public void addToExcel() throws IOException {
-        FileInputStream fis = new FileInputStream(Config.excelPath);
-        Workbook workbook = new XSSFWorkbook(fis);
+    public void addToExcel() throws IOException, IllegalArgumentException{
+        Workbook workbook;
+        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+            workbook = new XSSFWorkbook(fis);
+        }
+
         Sheet sheet = workbook.getSheetAt(0);
+
+        // National code duplication check
+        for (Row row : sheet) {
+            Cell ncCell =  row.getCell(2);
+            if (ncCell != null && ncCell.toString().equals(this.nationalCode)) {
+                throw new IllegalArgumentException("کد ملی تکراری نمی‌تواند باشد!");
+            }
+            if (ncCell == null) {
+                break;
+            }
+        }
 
         Row newRow = sheet.createRow(sheet.getLastRowNum() + 1);
 
@@ -76,63 +90,85 @@ public class ExcelRow {
         newRow.createCell(2).setCellValue(getNationalCode());
         newRow.createCell(3).setCellValue(getBirthDate());
 
-        FileOutputStream fos = new FileOutputStream(Config.excelPath);
-        workbook.write(fos);
+        try (FileOutputStream fos = new FileOutputStream(Config.excelPath)) {
+            workbook.write(fos);
+        }
+
         workbook.close();
-        fis.close();
-        fos.close();
     }
 
+    /**
+     * Removes a specific row by shifting following rows down,
+     * and removes the last row at last.
+     * @param rowNum
+     * @throws IOException
+     */
     public static void removeRow(int rowNum) throws IOException {
-        FileInputStream file = new FileInputStream(Config.excelPath);
-        Workbook workbook = new XSSFWorkbook(file);
+        Workbook workbook;
+
+        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+            workbook = new XSSFWorkbook(fis);
+        }
+
         Sheet sheet = workbook.getSheetAt(0);
-        sheet.removeRow(sheet.getRow(rowNum));
+        int lastRowNum = sheet.getLastRowNum();
 
-        // Removing the empty rows by replacing the empty row with the last row.
-        for (int i = 0; i < sheet.getLastRowNum(); i++) {
-            if (sheet.getRow(i).getCell(0) == null) {
-                Row lastRow = sheet.getRow(sheet.getLastRowNum());
-                Row currentRow = sheet.getRow(i);
+        if (rowNum >= 0 && rowNum <= lastRowNum) {
+            if (rowNum < lastRowNum) {
+                sheet.shiftRows(rowNum + 1, lastRowNum, -1);
+            }
 
-                currentRow.getCell(0).setCellValue(lastRow.getCell(0).getStringCellValue());
-                currentRow.getCell(1).setCellValue(lastRow.getCell(1).getStringCellValue());
-                currentRow.getCell(2).setCellValue(lastRow.getCell(2).getStringCellValue());
-                currentRow.getCell(3).setCellValue(lastRow.getCell(3).getStringCellValue());
-
-                sheet.removeRow(sheet.getRow(sheet.getLastRowNum()));
+            Row lastRow = sheet.getRow(lastRowNum);
+            if (lastRow != null) {
+                sheet.removeRow(lastRow);
             }
         }
-        FileOutputStream fileOut = new FileOutputStream(Config.excelPath);
-        workbook.write(fileOut);
-        file.close();
+
+        try (FileOutputStream fos = new FileOutputStream(Config.excelPath)) {
+            workbook.write(fos);
+        }
+
         workbook.close();
-        fileOut.close();
     }
 
     public static Row getRow(int rowNum) throws IOException {
-        FileInputStream file = new FileInputStream(Config.excelPath);
-        Workbook workbook = new XSSFWorkbook(file);
-        Sheet sheet = workbook.getSheetAt(0);
-
-        return sheet.getRow(rowNum);
+        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+            Workbook workbook = new XSSFWorkbook(fis);
+            Sheet sheet = workbook.getSheetAt(0);
+            return sheet.getRow(rowNum);
+        }
     }
 
-    public void editRow(int rowNum) throws IOException {
-        FileInputStream file = new FileInputStream(Config.excelPath);
-        Workbook workbook = new XSSFWorkbook(file);
+    public void editRow(int rowNum) throws IOException, IllegalArgumentException {
+        Workbook workbook;
+
+        try (FileInputStream file = new FileInputStream(Config.excelPath)) {
+            workbook = new XSSFWorkbook(file);
+        }
+
         Sheet sheet = workbook.getSheetAt(0);
         Row row = sheet.getRow(rowNum);
+
+        // National duplication check
+        for (Row r : sheet) {
+            Cell ncCell = r.getCell(2);
+            if (ncCell != null && r.getRowNum() != rowNum && ncCell.toString().equals(this.nationalCode)) {
+                throw new IllegalArgumentException("کد ملّی تکراری نمی‌تواند باشد!");
+            }
+            if (ncCell == null) {
+                break;
+            }
+        }
 
         row.getCell(0).setCellValue(getFirstName());
         row.getCell(1).setCellValue(getLastName());
         row.getCell(2).setCellValue(getNationalCode());
         row.getCell(3).setCellValue(getBirthDate());
 
-        OutputStream outputStream = new FileOutputStream(Config.excelPath);
-        workbook.write(outputStream);
-        file.close();
+        try (OutputStream outputStream = new FileOutputStream(Config.excelPath)) {
+            workbook.write(outputStream);
+        }
+
         workbook.close();
-        outputStream.close();
     }
 }

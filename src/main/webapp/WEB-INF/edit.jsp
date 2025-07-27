@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>خانه</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.rtl.min.css"
-          integrity="sha384-Xbg45MqvDIk1e563NLpGEulpX6AvL404DP+/iCgW9eFa2BqztiwTexswJo2jLMue" crossorigin="anonymous">
+    <title>ویرایش</title>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/css/bootstrap.rtl.min.css" crossorigin="anonymous">
 </head>
 <body>
 <!--Navbar Section-->
 <div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<%=request.getContextPath()%>">
+            <a class="navbar-brand" href="index">
                 <img src="<%=request.getContextPath()%>/images/icons8-excel-48.png" alt="icon" width="30">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -24,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>">خانه</a>
+                        <a class="nav-link active" aria-current="page" href="index">خانه</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="adduser">اضافه کردن کاربر</a>
@@ -43,7 +42,7 @@
 %>
 
 <form method="POST"
-      style="margin-top: 1%; margin-right: 25%; margin-left: 25%; padding-top: 1%; padding-right: 10%; padding-left: 10%;">
+      style="margin-top: 5%; margin-right: 25%; margin-left: 25%; padding-top: 1%; padding-right: 10%; padding-left: 10%;">
     <div class="mb-3">
         <label for="firstNameInput" class="form-label">نام</label>
         <input type="text" class="form-control" id="firstNameInput" aria-describedby="firstNameHelp"
@@ -61,7 +60,7 @@
     <div class="mb-3">
         <label for="nationalCodeInput" class="form-label">کد ملّی</label>
         <input type="number" class="form-control" id="nationalCodeInput" aria-describedby="nationalCodeHelp"
-               value="<%=row.getCell(2).getStringCellValue()%>" name="national_code" required>
+               value="<%=row.getCell(2).toString()%>" name="national_code" required>
         <div id="nationalCodeHelp" class="form-text">کد ملّی خود را در این قسمت ویرایش کنید.</div>
     </div>
     <div class="mb-3">
@@ -80,7 +79,7 @@
 } else if (request.getMethod().equals("POST")) {
 %>
 
-<form style="margin-top: 1%; margin-right: 25%; margin-left: 25%; padding-top: 1%; padding-right: 10%; padding-left: 10%;">
+<form style="margin-top: 5%; margin-right: 25%; margin-left: 25%; padding-top: 1%; padding-right: 10%; padding-left: 10%;">
     <div class="mb-3">
         <label for="firstNameInput" class="form-label">نام</label>
         <input type="text" class="form-control" id="firstNameInput" aria-describedby="firstNameHelp"
@@ -101,16 +100,14 @@
         <input type="date" class="form-control" id="birthDateInput" aria-describedby="birthDateHelp"
                value="<%=request.getParameter("birth_date")%>" dir="ltr" readonly>
     </div>
-    <a href="<%=request.getContextPath()%>">
-        <button type="button" class="btn btn-outline-primary">بازگشت به خانه</button>
-        <button type="button" onclick="history.back()" class="btn btn-outline-warning">بازگشت</button>
+    <a href="index"><button type="button" class="btn btn-outline-primary">بازگشت به خانه</button></a>
+    <button type="button" onclick="history.back()" class="btn btn-outline-warning">بازگشت</button>
 </form>
 
 <%
     }
 %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
+
+<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

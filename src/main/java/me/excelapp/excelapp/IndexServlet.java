@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/")
+@WebServlet("/index")
 public class IndexServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,18 +32,17 @@ public class IndexServlet extends HttpServlet {
     private List<Row> showExcel() throws IOException {
         List<Row> excelRows = new ArrayList<>();
 
-        FileInputStream fis = new FileInputStream(Config.excelPath);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheetAt(0);
-        for (Row row : sheet) {
-            if (row.getCell(0) != null) {
-                excelRows.add(row);
-            } else {
-                break;
+        try (FileInputStream fis = new FileInputStream(Config.excelPath); Workbook workbook = new XSSFWorkbook(fis)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                if (row.getCell(0) != null) {
+                    excelRows.add(row);
+                } else {
+                    break;
+                }
             }
         }
-        fis.close();
-        workbook.close();
+
         return excelRows;
     }
 
@@ -60,6 +59,7 @@ public class IndexServlet extends HttpServlet {
     public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String rowNum =  req.getParameter("rowNumber");
         ExcelRow.removeRow(Integer.parseInt(rowNum));
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+
+        resp.sendRedirect(req.getContextPath());
     }
 }
