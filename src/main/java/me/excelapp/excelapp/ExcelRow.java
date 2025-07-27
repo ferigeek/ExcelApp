@@ -1,5 +1,6 @@
 package me.excelapp.excelapp;
 
+import net.time4j.calendar.PersianCalendar;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -43,9 +44,12 @@ public class ExcelRow {
         // Birthdate validation
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate date = LocalDate.parse(birthDate, dtf);
-        if (!date.isAfter(LocalDate.now())) {
-            this.birthDate = date;
+        PersianCalendar persianToday = PersianCalendar.nowInSystemTime();
+        LocalDate today = LocalDate.of(persianToday.getYear(), persianToday.getMonth().getValue(), persianToday.getDayOfMonth());
+        if (date.isAfter(today) || date.isBefore(today.minusYears(100))) {
+            throw new IllegalArgumentException("تاریخ شما باید هجری شمسی باشد!");
         }
+        this.birthDate = date;
     }
 
     public String getFirstName() {

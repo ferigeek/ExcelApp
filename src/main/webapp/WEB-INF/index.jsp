@@ -8,7 +8,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>خانه</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/css/bootstrap.rtl.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/css/bootstrap.rtl.min.css"
+          crossorigin="anonymous">
 </head>
 <body>
 <!--Navbar Section-->
@@ -38,7 +39,7 @@
 </div>
 <!--/Navbar Section-->
 
-<div class="table-responsive" style="margin-left: 5%; margin-right: 5%; margin-top: 5%;">
+<div class="table-responsive" style="margin-top: 5%; margin-left: 1%; margin-right: 1%;">
     <table class="table table-striped-columns" border="1">
         <thead>
         <tr>
@@ -49,6 +50,48 @@
             <th scope="col">تاریخ تولد</th>
             <th scope="col">عملیات</th>
         </tr>
+        <tr>
+            <form action="search">
+                <th scope="col">
+                    <div class="mb-1">
+                        جست و جو
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="mb-1">
+                        <input type="text" name="first_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="mb-1">
+                        <input type="text" name="last_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام خانوادگی">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="mb-1">
+                        <input type="number" name="national_code_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی کد ملّی">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="mb-1 d-flex gap-2">
+                        <input type="date" name="birth_date_search_start"
+                               class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="از">
+                        <input type="date" name="birth_date_search_end"
+                               class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="تا">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="mb-1">
+                        <button type="submit" class="btn btn-outline-light btn-sm">جست و جو</button>
+                    </div>
+                </th>
+            </form>
+        </tr>
         </thead>
         <tbody>
         <%
@@ -57,11 +100,13 @@
                 for (Row row : excelContent) {
         %>
         <tr>
-            <th scope="row"><%=row.getRowNum()%></th>
+            <th scope="row"><%=row.getRowNum()%>
+            </th>
             <%
                 for (Cell cell : row) {
             %>
-            <td><%=cell.toString()%></td>
+            <td><%=cell.toString()%>
+            </td>
             <%
                 }
             %>
@@ -120,6 +165,7 @@
     }
 %>
 
-<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 </body>
 </html>
