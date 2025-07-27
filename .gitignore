@@ -39,4 +39,4 @@ build/
 
 *.xlsx
 /excel
-Config.java
+!**/src/main/java/**/Config.java
