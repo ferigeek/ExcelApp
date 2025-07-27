@@ -1,7 +1,14 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: farnam
+  Date: 7/27/25
+  Time: 1:46 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.apache.poi.ss.usermodel.Row" %>
 <%@ page import="org.apache.poi.ss.usermodel.Cell" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html dir="rtl" lang="fa" data-bs-theme="dark">
 <head>
@@ -59,30 +66,80 @@
                 </th>
                 <th scope="col">
                     <div class="mb-1">
-                        <input type="text" name="first_name_search" class="form-control form-control-sm"
-                               placeholder="جست و جوی نام">
+                        <%
+                            String sfName = request.getParameter("first_name_search");
+                            if (sfName != null && !sfName.isEmpty()) {
+                        %>
+                        <input type="text" name="first_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام" value="<%=sfName%>">
+                        <%
+                            } else {
+                        %>
+                        <input type="text" name="first_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام">
+                        <%
+                            }
+                        %>
+
                     </div>
                 </th>
                 <th scope="col">
                     <div class="mb-1">
-                        <input type="text" name="last_name_search" class="form-control form-control-sm"
-                               placeholder="جست و جوی نام خانوادگی">
+                        <%
+                            String slName = request.getParameter("last_name_search");
+                            if (slName != null && !slName.isEmpty()) {
+                        %>
+                        <input type="text" name="last_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام خانوادگی" value="<%=slName%>">
+                        <%
+                            } else {
+                        %>
+                        <input type="text" name="last_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام خانوادگی">
+                        <%
+                            }
+                        %>
                     </div>
                 </th>
                 <th scope="col">
                     <div class="mb-1">
-                        <input type="number" name="national_code_search" class="form-control form-control-sm"
-                               placeholder="جست و جوی کد ملّی">
+                        <%
+                            String snCode = request.getParameter("national_code_search");
+                            if (snCode != null && !snCode.isEmpty()) {
+                        %>
+                        <input type="number" name="national_code_search" class="form-control form-control-sm" placeholder="جست و جوی کد ملّی" value="<%=snCode%>">
+                        <%
+                            } else {
+                        %>
+                        <input type="number" name="national_code_search" class="form-control form-control-sm" placeholder="جست و جوی کد ملّی">
+                        <%
+                            }
+                        %>
                     </div>
                 </th>
                 <th scope="col">
                     <div class="mb-1 d-flex gap-2">
-                        <input type="date" name="birth_date_search_start"
-                               class="form-control form-control-sm"
-                               style="width: 50%;" placeholder="از">
-                        <input type="date" name="birth_date_search_end"
-                               class="form-control form-control-sm"
-                               style="width: 50%;" placeholder="تا">
+                        <%
+                            String sStart = request.getParameter("birth_date_search_start");
+                            if (sStart != null && !sStart.isEmpty()) {
+                        %>
+                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm" style="width: 50%;" placeholder="از" value="<%=sStart%>">
+                        <%
+                            } else {
+                        %>
+                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm" style="width: 50%;" placeholder="از">
+                        <%
+                            }
+                        %>
+
+                        <%
+                            String sEnd = request.getParameter("birth_date_search_end");
+                            if (sEnd != null && !sEnd.isEmpty()) {
+                        %>
+                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm" style="width: 50%;" placeholder="از" value="<%=sEnd%>">
+                        <%
+                        } else {
+                        %>
+                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm" style="width: 50%;" placeholder="از">
+                        <%
+                            }
+                        %>
                     </div>
                 </th>
                 <th scope="col">
@@ -95,7 +152,7 @@
         </thead>
         <tbody>
         <%
-            List<Row> excelContent = (List<Row>) request.getAttribute("excelContent");
+            List<Row> excelContent = (List<Row>) request.getAttribute("search_result");
             if (excelContent != null) {
                 for (Row row : excelContent) {
         %>
@@ -129,41 +186,6 @@
         </tbody>
     </table>
 </div>
-
-<%
-    String deleteResult = request.getParameter("success");
-    if (deleteResult != null && deleteResult.equals("true")) {
-%>
-
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="<%=request.getContextPath()%>/images/cloud-check.svg" class="rounded me-2" alt="حذف کاربر">
-            <strong class="me-auto">حذف کاربر</strong>
-            <small>نتیجه</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="بستن"></button>
-        </div>
-        <div class="toast-body">
-            حذف کاربر با موفقیت انجام شد!
-        </div>
-    </div>
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const toastEl = document.getElementById("liveToast");
-        const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
-            autohide: false
-        });
-        toast.show();
-
-        setTimeout(() => {
-            toast.hide();
-        }, 5000); // Hide after 5 seconds
-    });
-</script>
-<%
-    }
-%>
 
 <script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
