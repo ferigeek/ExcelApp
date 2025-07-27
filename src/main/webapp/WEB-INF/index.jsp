@@ -39,7 +39,7 @@
 <!--/Navbar Section-->
 
 <div class="table-responsive" style="margin-left: 5%; margin-right: 5%; margin-top: 5%;">
-    <table class="table" border="1">
+    <table class="table table-striped-columns" border="1">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -85,8 +85,41 @@
     </table>
 </div>
 
-<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
+<%
+    String deleteResult = request.getParameter("success");
+    if (deleteResult != null && deleteResult.equals("true")) {
+%>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="<%=request.getContextPath()%>/images/cloud-check.svg" class="rounded me-2" alt="حذف کاربر">
+            <strong class="me-auto">حذف کاربر</strong>
+            <small>نتیجه</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="بستن"></button>
+        </div>
+        <div class="toast-body">
+            حذف کاربر با موفقیت انجام شد!
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastEl = document.getElementById("liveToast");
+        const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+            autohide: false
+        });
+        toast.show();
+
+        setTimeout(() => {
+            toast.hide();
+        }, 5000); // Hide after 5 seconds
+    });
+</script>
+<%
+    }
+%>
+
+<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

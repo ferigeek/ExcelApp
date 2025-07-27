@@ -17,14 +17,21 @@ public class UserAddServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String firstName = req.getParameter("first_name");
-        String lastName = req.getParameter("last_name");
-        String nationalCode = req.getParameter("national_code");
-        String birthDate = req.getParameter("birth_date").replace('-', '/');
+        try {
+            String firstName = req.getParameter("first_name");
+            String lastName = req.getParameter("last_name");
+            String nationalCode = req.getParameter("national_code");
+            String birthDate = req.getParameter("birth_date").replace('-', '/');
 
-        ExcelRow newRow = new  ExcelRow(firstName,lastName,nationalCode,birthDate);
-        newRow.addToExcel();
+            ExcelRow newRow = new  ExcelRow(firstName,lastName,nationalCode,birthDate);
+            newRow.addToExcel();
 
-        req.getRequestDispatcher("/WEB-INF/adduser.jsp").forward(req,resp);
+            req.setAttribute("success", true);
+            req.getRequestDispatcher("/WEB-INF/adduser.jsp").forward(req,resp);
+        } catch (Exception ex) {
+            req.setAttribute("success", false);
+            req.setAttribute("message", ex.getMessage());
+            req.getRequestDispatcher("/WEB-INF/adduser.jsp").forward(req,resp);
+        }
     }
 }

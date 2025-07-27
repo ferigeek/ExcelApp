@@ -19,15 +19,22 @@ public class UserEditServlet extends HttpServlet{
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String firstName =  req.getParameter("first_name");
-        String lastName = req.getParameter("last_name");
-        String nationalCode = req.getParameter("national_code");
-        String birthDate = req.getParameter("birth_date").replace("-", "/");
-        String rowNum =  req.getParameter("rowNum");
+        try {
+            String firstName =  req.getParameter("first_name");
+            String lastName = req.getParameter("last_name");
+            String nationalCode = req.getParameter("national_code");
+            String birthDate = req.getParameter("birth_date").replace("-", "/");
+            String rowNum =  req.getParameter("rowNum");
 
-        ExcelRow editedRow = new ExcelRow(firstName,lastName,nationalCode,birthDate);
-        editedRow.editRow(Integer.parseInt(rowNum));
+            ExcelRow editedRow = new ExcelRow(firstName,lastName,nationalCode,birthDate);
+            editedRow.editRow(Integer.parseInt(rowNum));
 
-        req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
+            req.setAttribute("success", true);
+            req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
+        } catch (Exception ex) {
+            req.setAttribute("success", false);
+            req.setAttribute("message", ex.getMessage());
+            req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
+        }
     }
 }

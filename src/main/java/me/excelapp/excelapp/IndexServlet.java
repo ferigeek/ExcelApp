@@ -60,6 +60,6 @@ public class IndexServlet extends HttpServlet {
         String rowNum =  req.getParameter("rowNumber");
         ExcelRow.removeRow(Integer.parseInt(rowNum));
 
-        resp.sendRedirect(req.getContextPath());
+        resp.sendRedirect(req.getContextPath() + "/index?success=true");
     }
 }

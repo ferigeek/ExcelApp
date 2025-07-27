@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>اضافه کردن کاربر</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/css/bootstrap.rtl.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/css/bootstrap.rtl.min.css"
+          crossorigin="anonymous">
 </head>
 <body>
 <!--Navbar Section-->
@@ -99,9 +100,71 @@
 </form>
 
 <%
+    boolean success = (boolean) request.getAttribute("success");
+    if (success) {
+%>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="<%=request.getContextPath()%>/images/cloud-check.svg" class="rounded me-2"
+                 alt="اضافه کردن کاربر">
+            <strong class="me-auto">اضافه کردن کاربر</strong>
+            <small>نتیجه</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="بستن"></button>
+        </div>
+        <div class="toast-body">
+            کاربر با موفقیت اضافه شد!
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastEl = document.getElementById("liveToast");
+        const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+            autohide: false
+        });
+        toast.show();
+
+        setTimeout(() => {
+            toast.hide();
+        }, 5000); // Hide after 5 seconds
+    });
+</script>
+<%
+} else {
+    String message = (String) request.getAttribute("message");
+%>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="<%=request.getContextPath()%>/images/cloud-slash.svg" class="rounded me-2"
+                 alt="اضافه کردن کاربر">
+            <strong class="me-auto">اضافه کردن کاربر</strong>
+            <small>نتیجه</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="بستن"></button>
+        </div>
+        <div class="toast-body"><%=message%></div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastEl = document.getElementById("liveToast");
+        const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+            autohide: false
+        });
+        toast.show();
+
+        setTimeout(() => {
+            toast.hide();
+        }, 5000); // Hide after 5 seconds
+    });
+</script>
+<%
+        }
     }
 %>
 
-<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="<%=request.getContextPath()%>/bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 </body>
 </html>
