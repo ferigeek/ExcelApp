@@ -24,7 +24,7 @@ public class SearchServlet extends HttpServlet {
         String lastName = req.getParameter("last_name_search");
         String nationalCode = req.getParameter("national_code_search");
         String startDate = req.getParameter("birth_date_search_start");
-        String endDate = req.getParameter("brith_date_search_end");
+        String endDate = req.getParameter("birth_date_search_end");
 
         if (firstName != null || lastName != null || nationalCode != null || startDate != null || endDate != null) {
             req.setAttribute("search_result", getSearchResult(firstName, lastName, nationalCode, startDate, endDate));
