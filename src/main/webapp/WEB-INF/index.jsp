@@ -41,7 +41,15 @@
                                 <a class="dropdown-item" href="download" download="result.xlsx">دریافت فایل اکسل</a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">بارگذاری فایل اکسل دیگر</a></li>
+                            <form action="upload" method="POST" enctype="multipart/form-data">
+                                <li>
+                                    <button type="submit" class="dropdown-item">بارگذاری فایل اکسل دیگر</button>
+                                </li>
+                                <li>
+                                    <input type="file" name="excel_file_upload" required class="dropdown-item"
+                                           style="width: 250px;" accept=".xls,.xlsx"/>
+                                </li>
+                            </form>
                         </ul>
                     </li>
                 </ul>
