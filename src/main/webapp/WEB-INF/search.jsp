@@ -70,11 +70,13 @@
                             String sfName = request.getParameter("first_name_search");
                             if (sfName != null && !sfName.isEmpty()) {
                         %>
-                        <input type="text" name="first_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام" value="<%=sfName%>">
+                        <input type="text" name="first_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام" value="<%=sfName%>">
                         <%
-                            } else {
+                        } else {
                         %>
-                        <input type="text" name="first_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام">
+                        <input type="text" name="first_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام">
                         <%
                             }
                         %>
@@ -87,11 +89,13 @@
                             String slName = request.getParameter("last_name_search");
                             if (slName != null && !slName.isEmpty()) {
                         %>
-                        <input type="text" name="last_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام خانوادگی" value="<%=slName%>">
+                        <input type="text" name="last_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام خانوادگی" value="<%=slName%>">
                         <%
-                            } else {
+                        } else {
                         %>
-                        <input type="text" name="last_name_search" class="form-control form-control-sm" placeholder="جست و جوی نام خانوادگی">
+                        <input type="text" name="last_name_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی نام خانوادگی">
                         <%
                             }
                         %>
@@ -103,11 +107,13 @@
                             String snCode = request.getParameter("national_code_search");
                             if (snCode != null && !snCode.isEmpty()) {
                         %>
-                        <input type="number" name="national_code_search" class="form-control form-control-sm" placeholder="جست و جوی کد ملّی" value="<%=snCode%>">
+                        <input type="number" name="national_code_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی کد ملّی" value="<%=snCode%>">
                         <%
-                            } else {
+                        } else {
                         %>
-                        <input type="number" name="national_code_search" class="form-control form-control-sm" placeholder="جست و جوی کد ملّی">
+                        <input type="number" name="national_code_search" class="form-control form-control-sm"
+                               placeholder="جست و جوی کد ملّی">
                         <%
                             }
                         %>
@@ -119,11 +125,13 @@
                             String sStart = request.getParameter("birth_date_search_start");
                             if (sStart != null && !sStart.isEmpty()) {
                         %>
-                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm" style="width: 50%;" placeholder="از" value="<%=sStart%>">
+                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="از" value="<%=sStart%>">
                         <%
-                            } else {
+                        } else {
                         %>
-                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm" style="width: 50%;" placeholder="از">
+                        <input type="date" name="birth_date_search_start" class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="از">
                         <%
                             }
                         %>
@@ -132,11 +140,13 @@
                             String sEnd = request.getParameter("birth_date_search_end");
                             if (sEnd != null && !sEnd.isEmpty()) {
                         %>
-                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm" style="width: 50%;" placeholder="از" value="<%=sEnd%>">
+                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="از" value="<%=sEnd%>">
                         <%
                         } else {
                         %>
-                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm" style="width: 50%;" placeholder="از">
+                        <input type="date" name="birth_date_search_end" class="form-control form-control-sm"
+                               style="width: 50%;" placeholder="از">
                         <%
                             }
                         %>

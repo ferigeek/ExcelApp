@@ -16,8 +16,15 @@ public class ExcelRow {
     private String lastName;
     private String nationalCode;
     private LocalDate birthDate;
+    private String excelPath;
 
-    public ExcelRow(String firstName, String lastName, String nationalCode, String birthDate) throws IllegalArgumentException {
+    public ExcelRow(
+            String firstName,
+            String lastName,
+            String nationalCode,
+            String birthDate,
+            String excelPath
+    ) throws IllegalArgumentException {
         String persianPattern = "^[\\u0600-\\u06FF\\u067E\\u0686\\u06AF\\u200C]+$";
 
         // First name validation
@@ -45,11 +52,16 @@ public class ExcelRow {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate date = LocalDate.parse(birthDate, dtf);
         PersianCalendar persianToday = PersianCalendar.nowInSystemTime();
-        LocalDate today = LocalDate.of(persianToday.getYear(), persianToday.getMonth().getValue(), persianToday.getDayOfMonth());
+        LocalDate today = LocalDate.of(
+                persianToday.getYear(),
+                persianToday.getMonth().getValue(),
+                persianToday.getDayOfMonth());
         if (date.isAfter(today) || date.isBefore(today.minusYears(100))) {
-            throw new IllegalArgumentException("تاریخ شما باید هجری شمسی باشد!");
+            throw new IllegalArgumentException("تاریخ وارد شده باید هجری شمسی باشد!");
         }
         this.birthDate = date;
+
+        this.excelPath = excelPath;
     }
 
     public String getFirstName() {
@@ -68,9 +80,9 @@ public class ExcelRow {
         return birthDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
-    public void addToExcel() throws IOException, IllegalArgumentException{
+    public void addToExcel() throws IOException, IllegalArgumentException {
         Workbook workbook;
-        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+        try (FileInputStream fis = new FileInputStream(excelPath)) {
             workbook = new XSSFWorkbook(fis);
         }
 
@@ -78,7 +90,7 @@ public class ExcelRow {
 
         // National code duplication check
         for (Row row : sheet) {
-            Cell ncCell =  row.getCell(2);
+            Cell ncCell = row.getCell(2);
             if (ncCell != null && ncCell.toString().equals(this.nationalCode)) {
                 throw new IllegalArgumentException("کد ملی تکراری نمی‌تواند باشد!");
             }
@@ -94,7 +106,7 @@ public class ExcelRow {
         newRow.createCell(2).setCellValue(getNationalCode());
         newRow.createCell(3).setCellValue(getBirthDate());
 
-        try (FileOutputStream fos = new FileOutputStream(Config.excelPath)) {
+        try (FileOutputStream fos = new FileOutputStream(excelPath)) {
             workbook.write(fos);
         }
 
@@ -104,13 +116,14 @@ public class ExcelRow {
     /**
      * Removes a specific row by shifting following rows down,
      * and removes the last row at last.
+     *
      * @param rowNum
      * @throws IOException
      */
-    public static void removeRow(int rowNum) throws IOException {
+    public static void removeRow(int rowNum, String excelPath) throws IOException {
         Workbook workbook;
 
-        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+        try (FileInputStream fis = new FileInputStream(excelPath)) {
             workbook = new XSSFWorkbook(fis);
         }
 
@@ -128,15 +141,15 @@ public class ExcelRow {
             }
         }
 
-        try (FileOutputStream fos = new FileOutputStream(Config.excelPath)) {
+        try (FileOutputStream fos = new FileOutputStream(excelPath)) {
             workbook.write(fos);
         }
 
         workbook.close();
     }
 
-    public static Row getRow(int rowNum) throws IOException {
-        try (FileInputStream fis = new FileInputStream(Config.excelPath)) {
+    public static Row getRow(int rowNum, String excelPath) throws IOException {
+        try (FileInputStream fis = new FileInputStream(excelPath)) {
             Workbook workbook = new XSSFWorkbook(fis);
             Sheet sheet = workbook.getSheetAt(0);
             return sheet.getRow(rowNum);
@@ -146,7 +159,7 @@ public class ExcelRow {
     public void editRow(int rowNum) throws IOException, IllegalArgumentException {
         Workbook workbook;
 
-        try (FileInputStream file = new FileInputStream(Config.excelPath)) {
+        try (FileInputStream file = new FileInputStream(excelPath)) {
             workbook = new XSSFWorkbook(file);
         }
 
@@ -169,8 +182,8 @@ public class ExcelRow {
         row.getCell(2).setCellValue(getNationalCode());
         row.getCell(3).setCellValue(getBirthDate());
 
-        try (OutputStream outputStream = new FileOutputStream(Config.excelPath)) {
-            workbook.write(outputStream);
+        try (FileOutputStream fos = new FileOutputStream(excelPath)) {
+            workbook.write(fos);
         }
 
         workbook.close();

@@ -13,7 +13,8 @@ public class UserEditServlet extends HttpServlet{
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String rowNum = req.getParameter("rowNumber");
-        req.setAttribute("rowContent", ExcelRow.getRow(Integer.parseInt(rowNum)));
+        String excelPath = getServletContext().getInitParameter("excelPath");
+        req.setAttribute("rowContent", ExcelRow.getRow(Integer.parseInt(rowNum), excelPath));
         req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
     }
 
@@ -25,8 +26,9 @@ public class UserEditServlet extends HttpServlet{
             String nationalCode = req.getParameter("national_code");
             String birthDate = req.getParameter("birth_date").replace("-", "/");
             String rowNum =  req.getParameter("rowNum");
+            String excelPath = getServletContext().getInitParameter("excelPath");
 
-            ExcelRow editedRow = new ExcelRow(firstName,lastName,nationalCode,birthDate);
+            ExcelRow editedRow = new ExcelRow(firstName,lastName,nationalCode,birthDate,excelPath);
             editedRow.editRow(Integer.parseInt(rowNum));
 
             req.setAttribute("success", true);

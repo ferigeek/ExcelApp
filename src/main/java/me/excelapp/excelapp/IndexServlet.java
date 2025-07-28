@@ -20,7 +20,7 @@ import java.util.List;
 public class IndexServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        File excelFile = new File(Config.excelPath);
+        File excelFile = new File(getServletContext().getInitParameter("excelPath"));
         if (!excelFile.exists()) {
             resp.sendRedirect("/upload.jsp");
             return;
@@ -32,7 +32,8 @@ public class IndexServlet extends HttpServlet {
     private List<Row> showExcel() throws IOException {
         List<Row> excelRows = new ArrayList<>();
 
-        try (FileInputStream fis = new FileInputStream(Config.excelPath); Workbook workbook = new XSSFWorkbook(fis)) {
+        String excelPath = getServletContext().getInitParameter("excelPath");
+        try (FileInputStream fis = new FileInputStream(excelPath); Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 if (row.getCell(0) != null) {
@@ -57,8 +58,8 @@ public class IndexServlet extends HttpServlet {
 
     @Override
     public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String rowNum =  req.getParameter("rowNumber");
-        ExcelRow.removeRow(Integer.parseInt(rowNum));
+        String rowNum = req.getParameter("rowNumber");
+        ExcelRow.removeRow(Integer.parseInt(rowNum), getServletContext().getInitParameter("excelPath"));
 
         resp.sendRedirect(req.getContextPath() + "/index?success=true");
     }

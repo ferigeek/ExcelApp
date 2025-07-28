@@ -101,7 +101,9 @@
         <input type="date" class="form-control" id="birthDateInput" aria-describedby="birthDateHelp"
                value="<%=request.getParameter("birth_date")%>" dir="ltr" readonly>
     </div>
-    <a href="index"><button type="button" class="btn btn-outline-primary">بازگشت به خانه</button></a>
+    <a href="index">
+        <button type="button" class="btn btn-outline-primary">بازگشت به خانه</button>
+    </a>
     <button type="button" onclick="history.back()" class="btn btn-outline-warning">بازگشت</button>
 </form>
 
@@ -138,7 +140,7 @@
 </script>
 <%
 } else {
-        String message = (String) request.getAttribute("message");
+    String message = (String) request.getAttribute("message");
 %>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -150,7 +152,8 @@
             <small>نتیجه</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="بستن"></button>
         </div>
-        <div class="toast-body"><%=message%></div>
+        <div class="toast-body"><%=message%>
+        </div>
     </div>
 </div>
 <script>

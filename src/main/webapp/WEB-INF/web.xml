@@ -6,4 +6,12 @@
     <welcome-file-list>
         <welcome-file>index</welcome-file>
     </welcome-file-list>
+    <context-param>
+        <param-name>uploadtemp.dir</param-name>
+        <param-value>uploadtemps</param-value>
+    </context-param>
+    <context-param>
+        <param-name>excelPath</param-name>
+        <param-value>/Path/to/the/excel/file</param-value>
+    </context-param>
 </web-app>

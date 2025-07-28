@@ -22,8 +22,9 @@ public class UserAddServlet extends HttpServlet {
             String lastName = req.getParameter("last_name");
             String nationalCode = req.getParameter("national_code");
             String birthDate = req.getParameter("birth_date").replace('-', '/');
+            String excelPath = getServletContext().getInitParameter("excel_path");
 
-            ExcelRow newRow = new  ExcelRow(firstName,lastName,nationalCode,birthDate);
+            ExcelRow newRow = new  ExcelRow(firstName,lastName,nationalCode,birthDate,excelPath);
             newRow.addToExcel();
 
             req.setAttribute("success", true);
