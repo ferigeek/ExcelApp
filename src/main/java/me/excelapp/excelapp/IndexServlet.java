@@ -22,7 +22,7 @@ public class IndexServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         File excelFile = new File(getServletContext().getInitParameter("excelPath"));
         if (!excelFile.exists()) {
-            resp.sendRedirect("upload");
+            resp.sendRedirect("upload?empty=true");
             return;
         }
         req.setAttribute("excelContent", showExcel());
